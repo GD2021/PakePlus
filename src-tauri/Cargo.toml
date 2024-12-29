@@ -1,6 +1,6 @@
 [package]
 name = "Notes"
-version = "0.0.1"
+version = "0.0.3"
 description = "苹果备忘录"
 authors = ["1024xiaoshen"]
 edition = "2021"
