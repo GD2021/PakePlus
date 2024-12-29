@@ -1,7 +1,7 @@
 {
     "package": {
-        "productName": "diffsuite",
-        "version": "1.2.1"
+        "productName": "Diffsuite",
+        "version": "0.0.2"
     },
     "tauri": {
         "allowlist": {
