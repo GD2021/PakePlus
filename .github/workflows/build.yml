@@ -64,8 +64,8 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                   tagName: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
-                  releaseName: 'diffsuite v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
-                  releaseBody: '这是一个文本对比工具，使用PakePlus发布'
+                  releaseName: 'Diffsuite v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
+                  releaseBody: ''
                   releaseDraft: false
                   prerelease: false
                   publish: true
