@@ -1,6 +1,6 @@
 [package]
 name = "Anime"
-version = "0.0.2"
+version = "0.0.3"
 description = "动漫网站"
 authors = ["1024xiaoshen"]
 edition = "2021"
