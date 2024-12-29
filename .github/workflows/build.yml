@@ -65,7 +65,7 @@ jobs:
               with:
                   tagName: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
                   releaseName: 'WPSOnline v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
-                  releaseBody: '基于WPS网页制作'
+                  releaseBody: '基于wps在线版制作'
                   releaseDraft: false
                   prerelease: false
                   publish: true
