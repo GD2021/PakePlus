@@ -65,7 +65,7 @@ jobs:
               with:
                   tagName: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
                   releaseName: 'Anime v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
-                  releaseBody: '基于路漫漫网站制作，一款动漫观看程序。'
+                  releaseBody: '动漫网站'
                   releaseDraft: false
                   prerelease: false
                   publish: true
