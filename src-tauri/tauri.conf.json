@@ -1,6 +1,6 @@
 {
     "package": {
-        "productName": "Notes",
+        "productName": "AppleNotes",
         "version": "0.0.3"
     },
     "tauri": {
