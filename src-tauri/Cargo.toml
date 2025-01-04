@@ -1,6 +1,6 @@
 [package]
 name = "Diffsuite"
-version = "0.0.2"
+version = "0.0.3"
 description = "文本对比工具"
 authors = ["1024xiaoshen"]
 edition = "2021"
