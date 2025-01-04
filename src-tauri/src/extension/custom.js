@@ -46,27 +46,37 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     observer.observe(targetNode, config)
 })
-// yk.js
-window.onload = function() {
-    (function() {
-        "use strict";
+// 2.js
+// List of CSS selectors to remove
+const adSelectors = [
+    'div[data-adext]',
+    '.youku-advertise-layer',
+    '.advertise-layer',
+    '.ad-wrap:not(#google_ads_iframe_checktag)',
+    '#player-advertise'
+];
 
-        var css = `
-            #youku-pause-container{display:none!important}
-            watermark-layer{opacity:0!important}
-        `;
+// Function to remove elements matching the selectors
+function removeAds() {
+    adSelectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(element => {
+            element.remove();
+        });
+    });
+}
 
-        var style = document.createElement('style');
-        style.type = 'text/css';
+// Remove ads on initial load
+removeAds();
 
-        if (style.styleSheet) {
-            style.styleSheet.cssText = css;
-        } else {
-            style.appendChild(document.createTextNode(css));
-        }
+// Set up MutationObserver to remove ads added dynamically
+const observer = new MutationObserver(() => {
+    removeAds();
+});
 
-        var head = document.head || document.getElementsByTagName('head')[0];
-        head.appendChild(style);
-    })();
-};
-// end yk.js
+// Configure the observer to watch for changes in the entire document
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+// end 2.js
