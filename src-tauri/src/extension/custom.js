@@ -46,3 +46,27 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     observer.observe(targetNode, config)
 })
+// yk.js
+window.onload = function() {
+    (function() {
+        "use strict";
+
+        var css = `
+            #youku-pause-container{display:none!important}
+            watermark-layer{opacity:0!important}
+        `;
+
+        var style = document.createElement('style');
+        style.type = 'text/css';
+
+        if (style.styleSheet) {
+            style.styleSheet.cssText = css;
+        } else {
+            style.appendChild(document.createTextNode(css));
+        }
+
+        var head = document.head || document.getElementsByTagName('head')[0];
+        head.appendChild(style);
+    })();
+};
+// end yk.js
