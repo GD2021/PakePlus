@@ -1,6 +1,6 @@
 [package]
 name = "Youku"
-version = "0.0.3"
+version = "0.0.4"
 description = "优酷"
 authors = ["1024xiaoshen"]
 edition = "2021"
