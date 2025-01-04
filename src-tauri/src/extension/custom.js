@@ -47,36 +47,48 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(targetNode, config)
 })
 // 2.js
-// List of CSS selectors to remove
-const adSelectors = [
-    'div[data-adext]',
-    '.youku-advertise-layer',
-    '.advertise-layer',
-    '.ad-wrap:not(#google_ads_iframe_checktag)',
-    '#player-advertise'
-];
-
-// Function to remove elements matching the selectors
-function removeAds() {
-    adSelectors.forEach(selector => {
-        const elements = document.querySelectorAll(selector);
-        elements.forEach(element => {
-            element.remove();
-        });
+(function() {
+  window.addEventListener('DOMContentLoaded', function() {
+    // 移除广告DOM元素
+    var adSelectors = [
+      'div[data-adext]',
+      '.youku-advertise-layer',
+      '.advertise-layer',
+      '.ad-wrap:not(#google_ads_iframe_checktag)',
+      '#player-advertise'
+    ];
+    adSelectors.forEach(function(selector) {
+      var elements = document.querySelectorAll(selector);
+      elements.forEach(function(el) {
+        el.remove();
+      });
     });
-}
 
-// Remove ads on initial load
-removeAds();
+    // 阻止特定资源加载
+    var scripts = document.querySelectorAll('script[src]');
+    scripts.forEach(function(script) {
+      if (
+        script.src.includes('gm.mmstat.com/yt/youku.pcweb.control') ||
+        script.src.includes('fourier.taobao.com/rp') ||
+        script.src.includes('g.alicdn.com/AWSC/et/1.82.2/et_f.js')
+      ) {
+        script.remove();
+      }
+    });
 
-// Set up MutationObserver to remove ads added dynamically
-const observer = new MutationObserver(() => {
-    removeAds();
-});
+    var imgs = document.querySelectorAll('img[src]');
+    imgs.forEach(function(img) {
+      if (img.src.includes('acg.youku.com/webfile/IX5p5Aajvbq1bOVNR7rCKo8jZKCClTmr.jpg')) {
+        img.remove();
+      }
+    });
 
-// Configure the observer to watch for changes in the entire document
-observer.observe(document.body, {
-    childList: true,
-    subtree: true
-});
+    var links = document.querySelectorAll('link[href]');
+    links.forEach(function(link) {
+      if (link.href.includes('mmstat.com')) {
+        link.remove();
+      }
+    });
+  });
+})();
 // end 2.js
