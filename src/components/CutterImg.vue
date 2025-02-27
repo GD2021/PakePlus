@@ -1,7 +1,7 @@
 <template>
     <div class="avatar-container">
         <el-dialog
-            :title="title"
+            :title="t('editImg')"
             :model-value="visible"
             width="400px"
             append-to-body
@@ -35,7 +35,7 @@
                     :icon="RefreshRight"
                     @click="rotateRight()"
                 ></el-button>
-                <el-button @click="determine"> 确定 </el-button>
+                <el-button @click="determine"> {{ t('confirm') }} </el-button>
             </div>
         </el-dialog>
     </div>
@@ -46,17 +46,15 @@ import { Plus, Minus, RefreshLeft, RefreshRight } from '@element-plus/icons-vue'
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { getCurrentInstance, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const { proxy }: any = getCurrentInstance()
+const { t } = useI18n()
 
 const props = defineProps({
     imgUrl: {
         type: String,
         default: '',
-    },
-    title: {
-        type: String,
-        default: '编辑图片',
     },
     confirm: {
         type: Function,

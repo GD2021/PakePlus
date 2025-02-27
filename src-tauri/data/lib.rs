@@ -1,12 +1,5 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-
 mod command;
-use serde_json::Error;
-use tauri::{menu::*, utils::config::WindowConfig};
-
-fn json_to_window_config(window_json: &str) -> Result<WindowConfig, Error> {
-    serde_json::from_str(window_json)
-}
+use tauri::menu::*;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -33,24 +26,6 @@ pub fn run() {
             );
             menu
         })
-        .setup(|app| {
-            let app_handle = app.handle();
-            let window_json = r#"WINDOWCONFIG"#;
-            match json_to_window_config(window_json) {
-                Ok(config) => {
-                    println!("Parsed WindowConfig: {:?}", config);
-                    let _main_window =
-                        tauri::WebviewWindowBuilder::from_config(app_handle, &config)
-                            .unwrap()
-                            .build()
-                            .unwrap();
-                }
-                Err(err) => {
-                    eprintln!("Failed to parse JSON: {}", err);
-                }
-            }
-            Ok(())
-        })
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_fs::init())
@@ -58,6 +33,7 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_clipboard_manager::init())
+        .plugin(tauri_plugin_window_state::Builder::default().build())
         .invoke_handler(tauri::generate_handler![
             command::pakeplus::open_window,
             command::pakeplus::preview_from_config,
@@ -70,6 +46,19 @@ pub fn run() {
             command::pakeplus::update_config_json,
             command::pakeplus::rust_main_window,
         ])
+        .setup(|app| {
+            let app_handle = app.handle();
+            let _ = tauri::WebviewWindowBuilder::from_config(
+                app_handle,
+                &app.config().app.windows.get(0).unwrap().clone(),
+            )
+            .unwrap()
+            .initialization_script(include_str!("./extension/event.js"))
+            .initialization_script(include_str!("./extension/custom.js"))
+            .build()
+            .unwrap();
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

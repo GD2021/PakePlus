@@ -30,7 +30,7 @@ export default {
     urlInvalid: 'url必須以http開頭',
     example: '例如',
     appName: 'APP名稱',
-    appNameInvalid: 'APP名稱不能以數字開頭',
+    appNameInvalid: 'APP名稱只能包含字母、數字和下劃線',
     appId: 'APP標識',
     appIdInvalid: 'appid必須為字母、數字和.組成',
     appIcon: 'APP圖標',
@@ -101,4 +101,6 @@ export default {
     inputXpathSelectors: '請輸入selector選擇器，以英文分號分割',
     mobileEnd: '移動端',
     sourceCode: '源代碼',
+    editImg: '編輯圖片',
+    networkError: '網絡錯誤，請關閉代理再試!',
 }

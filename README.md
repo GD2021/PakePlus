@@ -1,8 +1,8 @@
 <h4 align="right"> 
-<a href="./docs/README.md">English</a> 
-<a href="./docs/README_ZH.md" 
+<span href=".README.md">English</span> 
+<a href="https://github.com/Sjj1024/PakePlus/discussions/2" 
 style="margin: 0 10px;" >简体中文</a> 
-<a href="./docs/README_JP.md">日本语</a>
+<a href="https://github.com/Sjj1024/PakePlus/discussions/108">日本语</a>
 </h4>  
 <p align="center">
     <img src="./docs/pakeplus.png" width=138/>
@@ -147,14 +147,15 @@ publish: false：means this version will not be published immediately, although 
 
 ## Support
 
-1. If PakePlus has brought joy to your life, feel free to support it.
- <p align="center" >
-    <img src="./docs/pay.png" />
+1. wechat and group
+ <p align="center" style="display:flex; justify-content: flex-start;" >
+    <img src="./docs/mywx.png" width=300/>
+    <img src="./docs/wxcode.png" width=300/>
  </p>
 
-2. wechat group
- <p align="center" >
-    <img src="./docs/wxcode.png" width=300/>
+1. If PakePlus has brought joy to your life, feel free to support it.
+ <p align="center" style="display:flex; justify-content: flex-start;">
+    <img src="./docs/pay.png" width=620/>
  </p>
 
 ## TODO

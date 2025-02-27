@@ -172,13 +172,15 @@ import { useRouter } from 'vue-router'
 import githubApi from '@/apis/github'
 import { ElMessage } from 'element-plus'
 import { usePakeStore } from '@/store'
-import { urlMap, openUrl, initProject } from '@/utils/common'
+import { urlMap, openUrl, initProject, isDev } from '@/utils/common'
 import pakePlusIcon from '@/assets/images/pakeplus.png'
 import { useI18n } from 'vue-i18n'
 // import { setTheme } from '@tauri-apps/api/app'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import { invoke, convertFileSrc } from '@tauri-apps/api/core'
 import { getVersion } from '@tauri-apps/api/app'
+import { tauriConfig } from '@/utils/common'
+import { platforms } from '@/utils/config'
 
 const router = useRouter()
 const store = usePakeStore()
@@ -236,7 +238,7 @@ const getImgUrl = (filePath: string) => {
 // new barnch config
 const showBranchDialog = () => {
     // if token exist, then creat branch, else next page
-    getCommitSha()
+    token.value && getCommitSha()
     // checkout has github token
     if (token.value === '') {
         ElMessage.error(t('configToken'))
@@ -317,13 +319,14 @@ const forkProgect = async (tips: boolean = true) => {
 // get commit sha
 const getCommitSha = async () => {
     // get commit sha by branch name
+    // if dev get dev branch, else get master branch
     const res: any = await githubApi.getaCommitSha(
         store.userInfo.login,
         'PakePlus',
-        'master'
+        isDev ? 'dev' : 'master'
     )
     console.log('getCommitSha', res.data)
-    if (res.status === 200) {
+    if (res.status === 200 && res.data) {
         store.setCommitSha(res.data)
         return true
     } else {
@@ -377,6 +380,19 @@ const creatBranch = async (first: boolean = false) => {
                     ...res.data,
                     ...initProject,
                     name: branchName.value,
+                    showName: branchName.value,
+                    appid: `com.${branchName.value}.app`,
+                    more: {
+                        ...tauriConfig,
+                        windows: {
+                            ...tauriConfig.windows,
+                            label: branchName.value,
+                            title: branchName.value,
+                            userAgent: platforms['desktop'].userAgent,
+                            width: platforms['desktop'].width,
+                            height: platforms['desktop'].height,
+                        },
+                    },
                 }
                 console.log('branch Info success', branchInfo)
                 store.setCurrentProject(branchInfo)

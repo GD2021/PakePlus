@@ -226,7 +226,7 @@
             <el-button :disabled="token === null" @click="createRepo">
                 {{ t('publish') }}
             </el-button>
-            <!-- <el-button @click="mouseover">test</el-button> -->
+            <el-button v-if="isDev" @click="libRsConfig">Test</el-button>
         </div>
         <!-- build -->
         <el-dialog
@@ -357,8 +357,13 @@ import { basename } from '@tauri-apps/api/path'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import CutterImg from '@/components/CutterImg.vue'
 import { useI18n } from 'vue-i18n'
-import { CSSFILTER, isAlphanumeric, openUrl } from '@/utils/common'
-import { emit } from '@tauri-apps/api/event'
+import {
+    CSSFILTER,
+    isAlphanumeric,
+    openUrl,
+    isDev,
+    convertToLocalTime,
+} from '@/utils/common'
 import { platforms } from '@/utils/config'
 import { platform } from '@tauri-apps/plugin-os'
 import { getCurrentWindow } from '@tauri-apps/api/window'
@@ -412,7 +417,12 @@ const appRules = reactive<FormRules>({
                 // console.log('appshow name value', value)
                 // the name cannot start with a digit
                 // the name cannot contain special characters
-                if (/^[0-9]/.test(value) || value.includes(' ')) {
+                // the name cannot include chinese characters
+                if (
+                    /^[0-9]/.test(value) ||
+                    value.includes(' ') ||
+                    /[\u4e00-\u9fa5]/.test(value)
+                ) {
                     callback(new Error(t('appNameInvalid')))
                 } else {
                     callback()
@@ -485,51 +495,7 @@ const isJson = ref(false)
 const tauriConfigRef = ref<any>(null)
 
 // tauri config
-const tauriConfig: any = reactive({
-    windows: {
-        label: store.currentProject.name,
-        title: appForm.showName,
-        url: appForm.url,
-        userAgent: platforms[appForm.platform].userAgent,
-        width: appForm.width,
-        height: appForm.height,
-        theme: null,
-        resizable: true,
-        fullscreen: false,
-        maximized: false,
-        minWidth: 400,
-        minHeight: 300,
-        maxWidth: 1920,
-        maxHeight: 1080,
-        decorations: true,
-        transparent: false,
-        titleBarStyle: 'Visible',
-        visible: true,
-        focus: true,
-        closable: true,
-        minimizable: true,
-        maximizable: true,
-        alwaysOnTop: false,
-        alwaysOnBottom: false,
-        center: false,
-        skipTaskbar: false,
-        tabbingIdentifier: null,
-        parent: null,
-        dragDropEnabled: true,
-        browserExtensionsEnabled: false,
-        devtools: true,
-        contentProtected: false,
-        hiddenTitle: false,
-        incognito: false,
-        proxyUrl: null,
-        useHttpsScheme: false,
-        zoomHotkeysEnabled: false,
-        acceptFirstMouse: false,
-        // if add additionalBrowserArgs, windows cant preview, but can build
-        // additionalBrowserArgs:
-        //     '--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --autoplay-policy=no-user-gesture-required --auto-accept-camera-and-microphone-capture',
-    },
-})
+const tauriConfig: any = reactive(store.currentProject.more)
 
 // change app name
 const changeAppName = (value: string) => {
@@ -543,6 +509,7 @@ const changeUrl = (value: string) => {
     tauriConfig.windows.url = value
 }
 
+// watch tauri config
 watch(tauriConfig, () => {
     console.log('tauriConfig change', tauriConfig)
     if (isJson.value) {
@@ -551,6 +518,7 @@ watch(tauriConfig, () => {
     } else {
         tauriConfigRef.value?.updateCode()
     }
+    saveFormInput()
 })
 
 // close tauri config dialog
@@ -732,7 +700,8 @@ const uploadIcon = async () => {
     const imageSize: any = await getImageSize(base64String)
     // console.log('imageSize', imageSize)
     if (imageSize.width === imageSize.height && fileName.endsWith('.png')) {
-        confirmIcon(base64String)
+        // confirmIcon(base64String)
+        cutVisible.value = true
     } else {
         cutVisible.value = true
     }
@@ -865,21 +834,29 @@ const saveJsFile = async () => {
     console.log(`js file saved to: ${savePath}`)
 }
 
+// save form input
+const saveFormInput = async () => {
+    console.log('saveFormInput', appForm)
+    console.log('tauriConfig', tauriConfig)
+    store.addUpdatePro({
+        ...appForm,
+        name: store.currentProject.name,
+        debug: pubForm.model,
+        more: tauriConfig,
+    })
+    tauriConfigRef.value?.updateCode()
+    // save js file content to appDataDir
+    if (jsFileContents.value) {
+        saveJsFile()
+    }
+}
+
 // save project
 const saveProject = async (tips: boolean = true) => {
     // await emit('handlepay', { loggedIn: true, token: 'authToken' })
     appFormRef.value?.validate(async (valid, fields) => {
         if (valid) {
-            store.addUpdatePro({
-                ...appForm,
-                name: store.currentProject.name,
-                debug: pubForm.model,
-                more: tauriConfig,
-            })
-            // save js file content to appDataDir
-            if (jsFileContents.value) {
-                saveJsFile()
-            }
+            saveFormInput()
             tips && ElMessage.success(t('saveSuccess'))
         } else {
             console.error('error submit!', fields)
@@ -1128,6 +1105,7 @@ const libRsConfig = async () => {
         const configContent: any = await invoke('rust_lib_window', {
             config: JSON.stringify(tauriConfig.windows),
         })
+        console.log('configContent', configContent)
         const updateRes: any = await githubApi.updateFileContent(
             store.userInfo.login,
             'PakePlus',
@@ -1205,11 +1183,14 @@ const onPublish = async () => {
     )
     try {
         // if name is ASCII
+        // remove label from windows
+        let { label, ...newWindows } = tauriConfig.windows
         const configContent: any = await invoke('update_config_file', {
             name: appForm.showName,
             version: appForm.version,
             id: appForm.appid,
             ascii: isAlphanumeric(appForm.showName),
+            windowConfig: JSON.stringify(newWindows),
         })
         // update config file
         const updateRes: any = await githubApi.updateConfigFile(
@@ -1262,6 +1243,7 @@ const dispatchAction = async () => {
     if (dispatchRes.status !== 204) {
         console.error('dispatch res error', dispatchRes)
         ElMessage.error('dispatch res error')
+        buildLoading.value = false
         return
     } else {
         buildSecondTimer = setInterval(() => {
@@ -1282,8 +1264,8 @@ const dispatchAction = async () => {
         setTimeout(async () => {
             checkDispatchTimer = setInterval(async () => {
                 checkBuildStatus()
-            }, 10000)
-        }, 1000 * 60 * 7)
+            }, 1000 * 3)
+        }, 1000 * 60 * 3)
     }
 }
 
@@ -1394,8 +1376,14 @@ const getLatestRelease = async () => {
         })
         const releaseData = {
             ...releaseRes.data,
-            assets,
+            assets: assets.map((asset: any) => {
+                return {
+                    ...asset,
+                    updated_at: convertToLocalTime(asset.updated_at),
+                }
+            }),
         }
+        console.log('releaseData-----', releaseData)
         store.setRelease(releaseData)
     } else {
         console.log('releaseRes error, but not important', releaseRes)
@@ -1420,11 +1408,6 @@ const initJsFileContents = async () => {
             value: item,
         }
     })
-}
-
-// init project
-const initProject = async () => {
-    console.log('initProject')
 }
 
 onMounted(async () => {
