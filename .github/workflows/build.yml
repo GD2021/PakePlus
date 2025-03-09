@@ -36,6 +36,9 @@ jobs:
                       target: 'x86_64-pc-windows-msvc'
                       args: ''
                     - platform: 'windows-latest'
+                      target: 'i686-pc-windows-msvc'
+                      args: ''
+                    - platform: 'windows-latest'
                       target: 'aarch64-pc-windows-msvc'
                       args: '--target aarch64-pc-windows-msvc'
 
@@ -82,9 +85,9 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                  tagName: 'PakePlus'
-                  releaseName: 'PakePlus v__VERSION__'
-                  releaseBody: 'This is a workflow to help you automate the publishing of your PakePlus project to GitHub Packages.'
+                  tagName: 'Ybao'
+                  releaseName: 'Ybao v__VERSION__'
+                  releaseBody: ''
                   releaseDraft: false
                   prerelease: false
                   publish: true
