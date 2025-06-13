@@ -16,6 +16,7 @@ export default {
     configToken: '請先配置Token',
     tokenOk: 'Token可用',
     tokenError: 'Token權限不足，請重新配置',
+    userPrivate: '賬號疑似被Github標記為不可用',
     projectExist: '項目已存在',
     creatProjectError: '創建項目失敗',
     englishName: '請輸入純英文項目名稱',
@@ -108,7 +109,7 @@ export default {
     copySuccess: '複製成功',
     delSuccess: '刪除成功',
     aboutGuide:
-        'PakePlus開源免費，僅僅只需要一個Github Token，就可以將你的網頁或Vue/React等項目打包成一個獨立可執行程序，支持Windows,macOS, Linux系統，還支持Android,iOS移動端。有問題可以加我微信：lanxingme，備註：PakePlus，或者給我發送郵件：1024xiaoshen@gmail.com',
+        'PakePlus開源免費，僅僅只需要一個Github Token，就可以將你的網頁或Vue/React等項目打包成一個獨立可執行程序，支持Windows,macOS, Linux系統，還支持Android,iOS移動端。有問題可以加我微信：lanxingme，備註：PakePlus，或者給我發送郵件：{email}',
     moreConfig: '更多配置',
     superpower: '能力演示',
     scriptFile: '腳本文件',
@@ -244,4 +245,5 @@ export default {
     selectPlatform: '請選擇發佈平台',
     urlCode: '二維碼',
     banned: '禁止',
+    fileLimitNumber: '超過文件數量限制{number}個',
 }

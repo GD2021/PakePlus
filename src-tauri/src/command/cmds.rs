@@ -498,3 +498,18 @@ pub async fn support_pp(_: AppHandle, token: String) {
     let response = request.send().await.unwrap();
     let _ = response.text().await.unwrap();
 }
+
+#[tauri::command]
+pub fn get_machine_uid() -> String {
+    let uid: String = machine_uid::get().unwrap();
+    uid
+}
+
+#[tauri::command]
+pub fn get_os_info() -> String {
+    // "windows", "linux", "macos"
+    let os = std::env::consts::OS;
+    // "x86", "x86_64", "arm", "aarch64"
+    let arch = std::env::consts::ARCH;
+    format!("{}-{}", os, arch)
+}

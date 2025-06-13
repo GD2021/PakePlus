@@ -20,6 +20,7 @@ export default {
     configToken: 'まずトークンを設定してください',
     tokenOk: 'トークンが有効です',
     tokenError: 'トークンが無効です、再設定してください',
+    userPrivate: 'Githubによってアカウントが無効になっていると疑われます',
     projectExist: 'プロジェクトはすでに存在します',
     creatProjectError: 'プロジェクトの作成に失敗しました',
     englishName: '純粋な英語のプロジェクト名を入力してください',
@@ -112,7 +113,7 @@ export default {
     copySuccess: 'コピー成功',
     delSuccess: '削除成功',
     aboutGuide:
-        'PakePlusはオープンソースで無料です。Webページをパッケージしてクロスプラットフォームアプリを作成するには、Githubトークンが1つだけ必要です。Windows、macOS、Linuxシステムをサポートし、Android、iOSモバイル端末もサポートします。質問がある場合は、私のWeChatに連絡してください：lanxingme（注：PakePlus）、または私にメールを送信してください：1024xiaoshen@gmail.com',
+        'PakePlusはオープンソースで無料です。Webページをパッケージしてクロスプラットフォームアプリを作成するには、Githubトークンが1つだけ必要です。Windows、macOS、Linuxシステムをサポートし、Android、iOSモバイル端末もサポートします。質問がある場合は、私のWeChatに連絡してください：lanxingme（注：PakePlus）、または私にメールを送信してください：{email}',
     moreConfig: 'より多くの設定',
     superpower: '能力',
     scriptFile: 'スクリプトファイル',
@@ -252,4 +253,5 @@ export default {
     selectPlatform: 'プラットフォームを選択してください',
     urlCode: 'QRコード',
     banned: '禁止',
+    fileLimitNumber: 'ファイル数の制限を超えました{number}個',
 }
